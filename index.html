@@ -2,122 +2,92 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MagisterIA - IES Politécnico</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MagisterIA - Full Experience</title>
     <style>
         :root {
             --bg-color: #0a0b10;
-            --card-bg: #161b22;
             --accent-color: #00c2ff;
-            --text-main: #ffffff;
-            --text-dim: #a3a3a3;
+            --header-height: 60px;
         }
 
-        body {
+        /* Вимикаємо прокрутку самої сторінки, щоб працювала тільки прокрутка чату */
+        html, body {
             margin: 0;
             padding: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            height: 100%;
             background-color: var(--bg-color);
-            color: var(--text-main);
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; 
         }
 
-        /* Навігація */
+        /* Тонка, сучасна шапка */
         header {
-            background: rgba(10, 11, 16, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 15px 5%;
+            height: var(--header-height);
+            background: rgba(16, 20, 28, 0.95);
+            backdrop-filter: blur(15px);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 0 25px;
             border-bottom: 1px solid #2d333b;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            box-sizing: border-box;
         }
 
         .logo {
+            color: #fff;
             font-weight: 800;
-            font-size: 1.5rem;
-            letter-spacing: -1px;
+            font-size: 1.3rem;
             text-transform: uppercase;
+            letter-spacing: -0.5px;
         }
 
         .logo span {
             color: var(--accent-color);
+            text-shadow: 0 0 15px rgba(0, 194, 255, 0.5);
         }
 
-        .school-name {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            font-weight: 400;
-        }
-
-        /* Hero секція з описом */
-        .hero {
-            padding: 40px 5% 20px;
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
-
-        .hero p {
-            color: var(--text-dim);
-            line-height: 1.6;
-            font-size: 1.1rem;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 5px 12px;
-            background: rgba(0, 194, 255, 0.1);
-            color: var(--accent-color);
-            border-radius: 20px;
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            border: 1px solid var(--accent-color);
+            color: #a3a3a3;
+            background: rgba(255,255,255,0.05);
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid #333;
         }
 
-        /* Контейнер чату */
-        .chat-container {
-            width: 95%;
-            max-width: 1200px;
-            margin: 20px auto 40px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid #2d333b;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            position: relative;
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #22c55e;
+        }
+
+        /* Контейнер для чату на весь екран */
+        .main-app {
+            height: calc(100vh - var(--header-height));
+            width: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         iframe {
+            flex-grow: 1;
             width: 100%;
-            height: 75vh;
             border: none;
-            display: block;
+            /* Дозволяємо браузеру коректно обробляти висоту на мобільних */
+            height: 100%;
         }
 
-        /* Мобільна адаптація */
+        /* Мобільні виправлення */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 1.8rem; }
-            .hero p { font-size: 0.95rem; }
-            header { padding: 10px 5%; }
-            .chat-container { 
-                width: 100%; 
-                margin: 10px 0 0; 
-                border-radius: 0; 
-                border-left: none; 
-                border-right: none; 
-            }
-            iframe { height: 70vh; }
+            header { padding: 0 15px; }
+            .logo { font-size: 1.1rem; }
+            .status span { display: none; } /* Ховаємо текст статусу на малих екранах */
         }
     </style>
 </head>
@@ -125,29 +95,20 @@
 
     <header>
         <div class="logo">Magister<span>IA</span></div>
-        <div class="school-name">IES Politécnico Soria</div>
+        <div class="status">
+            <div class="status-dot"></div>
+            <span>IES Politécnico Soria | Activo</span>
+        </div>
     </header>
 
-    <section class="hero">
-        <div class="badge">PROYECTO EDUCATIVO</div>
-        <h1>Asistente Académico Inteligente</h1>
-        <p>
-            Bienvenido a MagisterIA, la herramienta oficial de apoyo para estudiantes. 
-            Resuelve dudas, analiza proyectos y mejora tu aprendizaje de forma privada y segura.
-        </p>
-    </section>
-
-    <div class="chat-container">
-        <!-- Твій оригінальний iframe -->
+    <main class="main-app">
+        <!-- Твій чат тепер займає 100% простору під шапкою -->
         <iframe
             src="https://udify.app/chatbot/mMMqL5h12nNTDLNe"
-            allow="microphone">
+            allow="microphone"
+            allowfullscreen>
         </iframe>
-    </div>
-
-    <footer style="text-align: center; padding: 20px; color: var(--text-dim); font-size: 0.8rem;">
-        &copy; 2026 IES Politécnico Soria - Desarrollado con Gemini 3.1
-    </footer>
+    </main>
 
 </body>
 </html>
