@@ -9,9 +9,9 @@
             --bg-color: #0a0b10;
             --accent-color: #00c2ff;
             --header-height: 60px;
+            --card-bg: #161b22;
         }
 
-        /* Вимикаємо прокрутку самої сторінки, щоб працювала тільки прокрутка чату */
         html, body {
             margin: 0;
             padding: 0;
@@ -21,7 +21,84 @@
             overflow: hidden; 
         }
 
-        /* Тонка, сучасна шапка */
+        /* Стилі для екрана входу */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #2d333b;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .login-card h2 {
+            margin-top: 0;
+            color: #fff;
+            font-weight: 800;
+        }
+
+        .login-card h2 span {
+            color: var(--accent-color);
+        }
+
+        .login-card p {
+            color: #a3a3a3;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .btn-enter {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent-color);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-enter:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 194, 255, 0.4);
+        }
+
+        /* Основний додаток */
         header {
             height: var(--header-height);
             background: rgba(16, 20, 28, 0.95);
@@ -67,7 +144,6 @@
             box-shadow: 0 0 8px #22c55e;
         }
 
-        /* Контейнер для чату на весь екран */
         .main-app {
             height: calc(100vh - var(--header-height));
             width: 100%;
@@ -79,39 +155,27 @@
             flex-grow: 1;
             width: 100%;
             border: none;
-            /* Дозволяємо браузеру коректно обробляти висоту на мобільних */
             height: 100%;
         }
 
-        /* Мобільні виправлення */
         @media (max-width: 768px) {
             header { padding: 0 15px; }
             .logo { font-size: 1.1rem; }
-            .status span { display: none; } /* Ховаємо текст статусу на малих екранах */
+            .status span { display: none; }
         }
     </style>
-    <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69ff7f2106a7a01c3394a580/1jo70h73c';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-    <script type="text/javascript">
-var Tawk_API = Tawk_API || {};
-Tawk_API.onLoad = function(){
-    // Приховує віджет одразу після завантаження
-    Tawk_API.hideWidget();
-};
-</script>
-<!--End of Tawk.to Script-->
 </head>
 <body>
+
+    <!-- Екран входу -->
+    <div id="login-overlay">
+        <div class="login-card">
+            <h2>Magister<span>IA</span></h2>
+            <p>Por favor, introduce tu nombre completo para acceder al asistente académico.</p>
+            <input type="text" id="user-name" placeholder="Ej. Juan Pérez" autocomplete="name">
+            <button class="btn-enter" onclick="saveName()">Entrar al Chat</button>
+        </div>
+    </div>
 
     <header>
         <div class="logo">Magister<span>IA</span></div>
@@ -122,13 +186,63 @@ Tawk_API.onLoad = function(){
     </header>
 
     <main class="main-app">
-        <!-- Твій чат тепер займає 100% простору під шапкою -->
         <iframe
             src="https://udify.app/chatbot/mMMqL5h12nNTDLNe"
             allow="microphone"
             allowfullscreen>
         </iframe>
     </main>
+
+    <!-- Tawk.to Script -->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+
+        (function(){
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/69ff7f2106a7a01c3394a580/1jo70h73c';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+
+        // Логіка перевірки імені та Tawk.to
+        Tawk_API.onLoad = function() {
+            Tawk_API.hideWidget();
+            checkExistingUser();
+        };
+
+        function checkExistingUser() {
+            const savedName = localStorage.getItem('magister_student_name');
+            if (savedName) {
+                // Якщо ім'я є, ховаємо вхід і передаємо дані в Tawk
+                document.getElementById('login-overlay').style.display = 'none';
+                Tawk_API.setAttributes({
+                    'name': savedName
+                }, function(error){});
+            }
+        }
+
+        function saveName() {
+            const nameInput = document.getElementById('user-name').value.trim();
+            
+            if (nameInput.length < 3) {
+                alert("Por favor, introduce un nombre válido.");
+                return;
+            }
+
+            // Зберігаємо в браузері назавжди
+            localStorage.setItem('magister_student_name', nameInput);
+            
+            // Передаємо в панель вчителя (Tawk.to)
+            Tawk_API.setAttributes({
+                'name': nameInput
+            }, function(error){});
+
+            // Ховаємо екран входу
+            document.getElementById('login-overlay').style.display = 'none';
+        }
+    </script>
 
 </body>
 </html>
